@@ -1,0 +1,4 @@
+<!--pages/t/t.wxml-->
+<text>没有数据！</text>
+<button class="login-btn" bindtap="btnclick">返回主页</button>
+
