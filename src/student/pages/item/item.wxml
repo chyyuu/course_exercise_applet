@@ -1,0 +1,48 @@
+<!--index.wxml-->
+<view class='body'>
+  <view wx:if="{{item_index.type == 'single_answer'}}"><text>单选题</text></view>
+  <view wx:elif="{{item_index.type == 'true_false'}}"><text>判断题</text></view>
+  <view wx:elif="{{item_index.type == 'multi_answer'}}"><text>多选题</text></view>
+  <view wx:elif="{{item_index.type == 'question_qnswer'}}"><text>问答题</text></view>
+  <view wx:elif="{{item_index.type == 'fill_in_the_blank'}}"><text>填空题</text></view>
+  <view >{{item_index.question}}</view>
+
+  <view wx:if="{{item_index.type == 'single_answer' || item_index.type == 'true_false'}}">
+    <radio-group class="radio-group" bindchange="radioChange">
+        <label class="radio" wx:for="{{item_index.options}}">
+          <radio disabled="{{disabled_xx}}" value="{{index}}"/>{{item}}<br />
+        </label>
+    </radio-group>
+  </view>
+  <view wx:elif="{{item_index.type == 'multi_answer'}}">
+    <checkbox-group bindchange="checkboxChange">
+      <label class="checkbox" wx:for="{{item_index.options}}">
+        <checkbox disabled="{{disabled_xx}}" value="{{index}}"/>{{item}}
+      </label>
+    </checkbox-group>
+  </view>
+  <view wx:elif="{{item_index.type == 'question_qnswer'}}">
+    <textarea disabled="{{disabled_xx}}" auto-focus bindinput="input" placeholder="请输入答案......" />
+  </view>
+  <view wx:elif="{{item_index.type == 'fill_in_the_blank'}}">
+    <view wx:for="{{item_index.answer}}">
+      <input  id = "{{index}}" disabled="{{disabled_xx}}" bindinput="bindKeyInput" placeholder="请输入第{{index+1}}空的答案......"/>
+    </view>
+  </view>
+
+  <view class='tijiao'>
+    <button disabled="{{disabled_tj}}" bindtap="tijiao"> 提交 </button>
+    <button disabled="{{disabled_xyt}}" bindtap="xiyiti"> 下一题 </button>
+  </view>
+
+  <view wx:if="{{disabled_xinxi}}">
+    <view class='knowledge'><text>知识点：</text>{{item_index.knowledge}}</view>
+    <view class='source'><text>出处：</text>{{item_index.source}}</view>
+    <view class='degree_of_difficulty'><text>难度：</text>{{item_index.degree_of_difficulty}}</view>
+  </view>  
+  <view wx:else>
+    <view class='jieguo'><text>{{jieguo}}</text></view>
+    <view wx:if="{{item_index.type != '问答题' && item_index.type != '填空题'}}" class='answer'><text>答案：</text>{{item_index.answer}}</view>
+    <view class='explain'><text>详解：</text>{{item_index.explain}}</view>
+  </view>  
+</view>

@@ -1,0 +1,42 @@
+<!--index.wxml-->
+<view class="1">
+  <view class="userinfo">
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"> 微信授权 </button>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+      <text class="userinfo-nickname" wx:if="{{!hasRegisterInfo}}">{{userInfo.nickName}}</text>
+      <text class="userinfo-nickname" wx:elif="{{hasRegisterInfo}}">{{registerInfoStr}}</text>
+    </block>
+  </view>
+  <view wx:if="{{hasUserInfo && !hasRegisterInfo}}">
+    <view class="login-item">您是
+      <radio-group class="radio-group" id="1" bindchange="change">
+        <label class="radio">
+          <radio value="T"/>老师
+          <radio value="S"/>学生
+        </label>        
+      </radio-group>
+    </view>
+    <view class="login-item">学号/工作证号<input id="2" bindinput="change" /></view>
+    <view class="login-item">班级号<input id="3" bindinput="change" /></view>
+    <view class="login-item">姓名<input id="4" bindinput="change" /></view>
+    <view class="login-item bottom">
+      <button class="login-btn" bindtap="btnClick">注册信息</button>
+    </view>
+  </view>
+  <view wx:elif="{{hasUserInfo && hasRegisterInfo}}">
+    <view wx:if="{{isTeacher}}">
+      我是老师
+    </view>
+    <view wx:else>
+      我是学生
+      <button class="login-btn" bindtap="btnTest">当前测试</button>
+      <view wx:if="{{hasTest}}">
+        <view class="line"></view>
+        <view wx:for="{{test}}">
+          <button class="login-btn" id = "{{item.id}}" bindtap="beginTest">第{{index+1}}个测试</button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

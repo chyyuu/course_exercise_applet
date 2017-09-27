@@ -1,0 +1,47 @@
+.checkbox{
+  display:inline-block;
+}
+
+.radio{
+  display:inline-block;
+}
+
+.body{
+  padding: 10px;
+}
+
+.body>view{
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-bottom: 5px;
+}
+
+text{
+  color: red;
+  padding: 10px;
+
+}
+
+.tijiao{
+  display: flex;
+  flex-direction: row;
+}
+
+.tijiao button{
+  width: 30%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+textarea{
+  border: 1px solid darkgray;
+  padding: 8px;
+  margin-top:5px;
+  height: 4em; 
+}
+
+input{
+  border: 1px solid darkgray;
+  padding: 8px;
+  margin-top:5px;
+}
