@@ -1,0 +1,31 @@
+#left{
+	width:10%;
+	float:left;
+	height:92%;
+	overflow:auto;
+}
+
+#right{
+	width:90%;
+	float:left;
+	height:92%;
+	overflow:auto;
+}
+
+span{
+	float:left;
+	width:80px; 
+	text-align:right;
+}
+
+.buXianshi{
+	display:none;
+}
+
+.xuanXiang_div{
+	margin-left:80px;
+	display:none;
+}
+.bu_xianshi{
+	display:none;
+}
