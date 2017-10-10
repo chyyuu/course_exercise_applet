@@ -1,0 +1,4 @@
+<!--pages/test/test.wxml-->
+测试结束！
+<button class="login-btn" bindtap="btnclick">返回主页</button>
+
