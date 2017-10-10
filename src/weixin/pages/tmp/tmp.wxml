@@ -1,0 +1,4 @@
+<!--pages/t/t.wxml-->
+<text>该测试没有测试题！</text>
+<button class="login-btn" bindtap="btnclick">返回主页</button>
+
