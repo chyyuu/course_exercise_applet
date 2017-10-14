@@ -34,8 +34,8 @@
 	</select>
 	<select id="item_zuoye"><option value='first'>请选择试题</option></select>
 	<select id="user_zuoye"><option value='first'>请选择学生</option></select>
-	<div id="pic_zuoye"></div>
 	<button class='quXiao'>结束</button>
+	<div id="pic_zuoye"></div>
 </div>
 
 <div id='chuTi_div' class="bu_xianshi">
@@ -80,11 +80,11 @@
 			<option value="4">4</option>
 			<option value="5">5</option>
 		</select><br />
-	<span> 题干正文：</span><input type="text" id="question"><br />
+	<span> 题干正文：</span><textarea id="question"></textarea><br />
 	<div id="xuanXiang">
 		<span> 选项：</span>A、对&nbsp&nbsp&nbsp&nbspB、错<br />
 		<span> 答案：</span><input type="text" id="answer"><br />
-		<span> 解释：</span><input type="text" id="explain"><br />
+		<span> 解释：</span><textarea id="explain"></textarea><br />
 	</div>
         <hr />
     	<button id='tijiao_shiti'>提交</button>
@@ -97,15 +97,16 @@
 			<option value="编译原理">编译原理</option>
 			<option value="计算机科学导论">计算机科学导论</option>
 		</select>
-    	<div id="knowledge_juanzi"></div>
     	<button id="tijiao_knowledge">开始</button>
     	<button class='quXiao'>取消</button>
+    	<div id="knowledge_juanzi"></div>
 </div>
 <div id="chuJuanzi_div" class="bu_xianshi">
        	<hr />
-        测试名称：<input id="name" type="text" />开始时间：<input id="begin" type="date" />结束时间：<input id="end" type="date" />
+        测试名称：<input id="name" type="text" />
         <button id='tijiao_juanzi'>提交</button>
-    	<button class='quXiao'>取消</button>
+    	<button class='quXiao'>取消</button><br />
+	开始时间：<input id="begin" type="date" />结束时间：<input id="end" type="date" />
 
         <hr />
         <div id='left'>

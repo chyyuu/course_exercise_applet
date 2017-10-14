@@ -120,14 +120,14 @@ $(document).ready(function(){
 		var s = $(this).children('option:selected').val();
 		switch(s){
 			case 'true_false':
-        			$("#xuanXiang").append($('<span> 选项：</span>A、对&nbsp&nbsp&nbsp&nbspB、错<br /><span> 答案：</span><input type="text" id="answer"><br /><span> 解释：</span><input type="text" id="explain"><br />')); 
+        			$("#xuanXiang").append($('<span> 选项：</span>A、对&nbsp&nbsp&nbsp&nbspB、错<br /><span> 答案：</span><input type="text" id="answer"><br /><span> 解释：</span><textarea id="explain"></textarea><br />')); 
 				break;
 			case 'single_answer':
 			case 'multi_answer':
-        			$("#xuanXiang").append($('<span> 选项：</span><div id="xuanXiang_1"><input type="text" id="num_xx" value="请输入项数..." /><button id="tianJia_xx">添加选项</button></div><div id="xuanXiang_xz" class="xuanXiang_div"></div><span> 答案：</span><input type="text" id="answer" /><br /><span> 解释：</span><input type="text" id="explain" /><br />')); 
+        			$("#xuanXiang").append($('<span> 选项：</span><div id="xuanXiang_1"><input type="text" id="num_xx" value="请输入项数..." /><button id="tianJia_xx">添加选项</button></div><div id="xuanXiang_xz" class="xuanXiang_div"></div><span> 答案：</span><input type="text" id="answer" /><br /><span> 解释：</span><textarea id="explain"></textarea><br />')); 
 				break;
 			case 'fill_in_the_blank':
-        			$("#xuanXiang").append($('<span> 答案：</span><div id="xuanXiang_1"><input type="text" id="num_xx" value="请输入项数..." /><button id="tianJia_xx">添加答案</button></div><div id="xuanXiang_xz" class="xuanXiang_div"></div><span> 解释：</span><input type="text" id="explain" /><br />')); 
+        			$("#xuanXiang").append($('<span> 答案：</span><div id="xuanXiang_1"><input type="text" id="num_xx" value="请输入项数..." /><button id="tianJia_xx">添加答案</button></div><div id="xuanXiang_xz" class="xuanXiang_div"></div><span> 解释：</span><textarea id="explain"></textarea><br />')); 
 				break;
 			case 'question_answer':
         			$("#xuanXiang").append($('<span> 答案：</span><form id= "uploadForm"><input type="file" name="photo"/></form>')); 
@@ -334,18 +334,19 @@ $(document).ready(function(){
 		else
 			answer[0] =$("#answer").val();
 		if($("#knowledge").val()=='qita')
-			$knowledge =  $("#knowledge_qita").val();
+			knowledge =  $("#knowledge_qita").val();
 		else
-			$knowledge =  $("#knowledge").val();
-
+			knowledge =  $("#knowledge").val();
+		question=$("#question").val();
 		$.ajax({
     			url:'create_item.php',
     			type:'POST',
     			data:{
    		 		"course":$("#course").val(),
-   		 		"knowledge":$knowledge,
+   		 		"knowledge":knowledge,
     				"degree_of_difficulty":$("#degree_of_difficulty").val(),
     				"explain":$("#explain").val(),
+ //   				"question":question.replace(/\n|\r\n/g,"<br>"),
     				"question":$("#question").val(),
     				"source":$("#source").val(),
     				"answer": answer,

@@ -28,6 +28,7 @@ function chaxun($str){
 		$tmp["source"] =  $row["source"];
 		$tmp["explain"] =  $row["explain"];
 		$tmp["type"] =  $row["type"];
+//		$tmp["question"] =  str_replace("<br>", '\n', $row["question"]);
 		$tmp["question"] =  $row["question"];
 		$tmp["degree_of_difficulty"] =  $row["degree_of_difficulty"];
 
