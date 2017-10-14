@@ -1,11 +1,11 @@
 <!--index.wxml-->
 <view class='body'>
-  <view wx:if="{{item_index.type == 'single_answer'}}"><text>单选题</text></view>
-  <view wx:elif="{{item_index.type == 'true_false'}}"><text>判断题</text></view>
-  <view wx:elif="{{item_index.type == 'multi_answer'}}"><text>多选题</text></view>
-  <view wx:elif="{{item_index.type == 'question_answer'}}"><text>问答题</text></view>
-  <view wx:elif="{{item_index.type == 'fill_in_the_blank'}}"><text>填空题</text></view>
-  <view >({{item_index.id}}){{item_index.question}}</view>
+  <view wx:if="{{item_index.type == 'single_answer'}}"><text class="label">单选题</text></view>
+  <view wx:elif="{{item_index.type == 'true_false'}}"><text class="label">判断题</text></view>
+  <view wx:elif="{{item_index.type == 'multi_answer'}}"><text class="label">多选题</text></view>
+  <view wx:elif="{{item_index.type == 'question_answer'}}"><text class="label">问答题</text></view>
+  <view wx:elif="{{item_index.type == 'fill_in_the_blank'}}"><text class="label">填空题</text></view>
+  <view><text>({{item_index.id}}){{item_index.question}}</text></view>
 
   <view wx:if="{{item_index.type == 'single_answer' || item_index.type == 'true_false'}}">
     <radio-group class="radio-group" bindchange="radioChange">
@@ -39,16 +39,21 @@
   </view>
 
   <view wx:if="{{disabled_xinxi}}">
-    <view class='knowledge'><text>知识点：</text>{{item_index.knowledge}}</view>
-    <view class='source'><text>出处：</text>{{item_index.source}}</view>
-    <view class='degree_of_difficulty'><text>难度：</text>{{item_index.degree_of_difficulty}}</view>
+    <view class='knowledge'><text class="label">知识点：</text>{{item_index.knowledge}}</view>
+    <view class='source'><text class="label">出处：</text>{{item_index.source}}</view>
+    <view class='degree_of_difficulty'><text class="label">难度：</text>{{item_index.degree_of_difficulty}}</view>
   </view>  
   <view wx:else>
-    <view wx:if="{{item_index.type == 'question_answer'}}"><text>详解：</text><image src="{{question_pic}}" mode="aspectFit" style="width:100%"/></view>
+    <view wx:if="{{item_index.type == 'question_answer'}}">
+      <text class="label">详解：</text>
+      <view style="position:relative;height:{{viewHeight}}px;width:{{viewHeight}}px;overflow:hidden">
+        <image catchtouchstart='starttap' catchtouchmove="movetap" style="position:absolute;width:{{scaleWidth}}px;height:{{scaleHeight}}px;left:{{imgLeft}}px;top:{{imgTop}}px" mode="aspectFit" src="{{question_pic}}"></image>
+      </view>
+    </view>
     <view wx:else>
-      <view><text>{{jieguo}}</text></view>
-      <view><text>答案：</text>{{item_index.answer}}</view>
-      <view><text>详解：</text>{{item_index.explain}}</view>
+      <view><text class="label">{{jieguo}}</text></view>
+      <view><text class="label">答案：</text><text>{{item_index.answer}}</text></view>
+      <view><text class="label">详解：</text><text>{{item_index.explain}}</text></view>
     </view>  
   </view>  
 </view>
