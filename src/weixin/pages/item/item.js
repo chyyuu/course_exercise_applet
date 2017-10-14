@@ -1,4 +1,10 @@
 const app = getApp()
+var olddistance;
+var oldscale;
+var oldX;
+var oldY;
+var imgWidth;
+var one_two = 0;
 
 Page({
   data: {
@@ -9,6 +15,11 @@ Page({
     disabled_xyt: true,
     disabled_xx: false,
     disabled_xinxi: true,
+    scaleWidth: "",
+    scaleHeight: "",
+    viewHeight: "",
+    imgLeft: 0,
+    imgTop: 0,
     tmp:null,
     tempFilePaths: '',
     question_pic: '',
@@ -71,13 +82,13 @@ Page({
             wx.showToast({
               title: '图片上传成功！',
               icon:'success',
-              duration:1000
+              duration:2000
             })
           }
           else{
             wx.showToast({
               title: '图片上传失败！',
-              duration: 1000
+              duration: 2000
             })
           }
         }
@@ -136,8 +147,8 @@ Page({
     var _this = this;
     wx.chooseImage({
       count: 1, // 默认9  
-      sizeType: ['original'], // 可以指定是原图还是压缩图，默认二者都有  
-      sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有  
+      sizeType: ['original','compressed'], // 可以指定是原图还是压缩图，默认二者都有  
+      sourceType: ['album'], // 可以指定来源是相册还是相机，默认二者都有  
       success: function (res) {
         // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片  
         _this.setData({
@@ -147,32 +158,71 @@ Page({
       }
     })
   },
+  movetap: function (event) {
+    var e = event;
+    if (one_two == 2 && e.touches.length == 2) {
+      var xMove = e.touches[1].clientX - e.touches[0].clientX;
+      var yMove = e.touches[1].clientY - e.touches[0].clientY;
+      var newdistance = Math.sqrt(xMove * xMove + yMove * yMove);
+      var diffdistance = newdistance - olddistance;
+      olddistance = newdistance; //计算之后更新  
+      var newScale = oldscale + 0.01 * diffdistance;  //比例  
+      oldscale = newScale;
+      var newWidth = newScale * imgWidth;
+      var left = this.data.imgLeft - (newWidth - this.data.scaleHeight) / 2;
+      var top = this.data.imgTop - (newWidth - this.data.scaleWidth) / 2;
+      this.setData({
+        scaleHeight: newWidth,
+        scaleWidth: newWidth,
+        imgLeft: left,
+        imgTop: top
+      })
+    }
+    else if (one_two == 1 && e.touches.length == 1) {
+      var newX = e.touches[0].clientX;
+      var newY = e.touches[0].clientY;
+      var left = this.data.imgLeft + (newX - oldX);
+      var top = this.data.imgTop + (newY - oldY);
+      oldX = newX;
+      oldY = newY;
+      this.setData({
+        imgLeft: left,
+        imgTop: top
+      })
+    }
+  },
+  starttap: function (event) {
+    var e = event;
+    if (e.touches.length == 2) {
+      one_two = 2;
+      var xMove = e.touches[1].clientX - e.touches[0].clientX;
+      var yMove = e.touches[1].clientY - e.touches[0].clientY;
+      olddistance = Math.sqrt(xMove * xMove + yMove * yMove);//两手指之间的距离
+    }
+    else if (e.touches.length == 1) {
+      one_two = 1;
+      oldX = e.touches[0].clientX;
+      oldY = e.touches[0].clientY;
+    }
+  },
   onLoad:function(options){
-    console.log(options.index)
     this.setData({
-//      item_index: JSON.parse(app.globalData.items[parseInt(options.index)])
-      item_index: app.globalData.items[parseInt(options.index)]
+      item_index: app.globalData.items[parseInt(options.index)],
     });
     if (this.data.item_index.type == 'question_answer') {
       this.setData({
         question_pic: "https://75502554.qcloud.la/teacher/picture.php?id=" + this.data.item_index.id
       });
     }
-    /*
-    switch (this.data.item_index.type){
-      case "true_false":
-        this.data.item_index.type = "判断题";
-        break;
-      case "multi_answer":
-        this.data.item_index.type = "多选题";
-        break;
-      case "single_answer":
-        this.data.item_index.type = "单选题";
-        break;
-      case "fill_in_the_blank":
-        this.data.item_index.type = "填空题";
-        break;
-    }*/
+    var res = wx.getSystemInfoSync();  //获取系统信息的同步方法，我用了异步里面提示我this.setData错了
+    var windowWidth = res.windowWidth;
+    imgWidth = windowWidth;
+    oldscale = 1;
+    this.setData({
+      scaleHeight: windowWidth,
+      scaleWidth: windowWidth,
+      viewHeight: windowWidth
+    });
   },
   onReady:function(){
   },

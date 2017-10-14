@@ -16,10 +16,9 @@
   padding-bottom: 5px;
 }
 
-text{
+.label{
   color: red;
   padding: 10px;
-
 }
 
 .tijiao{
