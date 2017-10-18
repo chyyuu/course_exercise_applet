@@ -5,7 +5,12 @@ var oldX;
 var oldY;
 var imgWidth;
 var one_two = 0;
-
+var olddistance_q;
+var oldscale_q;
+var oldX_q;
+var oldY_q;
+var imgWidth_q;
+var one_two_q = 0;
 Page({
   data: {
     item_index:null,
@@ -20,9 +25,15 @@ Page({
     viewHeight: "",
     imgLeft: 0,
     imgTop: 0,
+    scaleWidth_q: "",
+    scaleHeight_q: "",
+    viewHeight_q: "",
+    imgLeft_q: 0,
+    imgTop_q: 0,
     tmp:null,
     tempFilePaths: '',
-    question_pic: '',
+    answer_pic: '',
+    question_pic:'',
     alphabet: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'G', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'],
   },
   radioChange: function (e) {
@@ -205,23 +216,81 @@ Page({
       oldY = e.touches[0].clientY;
     }
   },
+  movetap_q: function (event) {
+    var e = event;
+    if (one_two_q == 2 && e.touches.length == 2) {
+      var xMove = e.touches[1].clientX - e.touches[0].clientX;
+      var yMove = e.touches[1].clientY - e.touches[0].clientY;
+      var newdistance = Math.sqrt(xMove * xMove + yMove * yMove);
+      var diffdistance_q = newdistance - olddistance_q;
+      olddistance_q = newdistance; //计算之后更新  
+      var newScale = oldscale_q + 0.01 * diffdistance_q;  //比例  
+      oldscale_q = newScale;
+      console.log('newScale'+newScale);
+      var newWidth = newScale * imgWidth_q;
+      var left = this.data.imgLeft_q - (newWidth - this.data.scaleHeight_q) / 2;
+      var top = this.data.imgTop_q - (newWidth - this.data.scaleWidth_q) / 2;
+      this.setData({
+        scaleHeight_q: newWidth,
+        scaleWidth_q: newWidth,
+        imgLeft_q: left,
+        imgTop_q: top
+      })
+    }
+    else if (one_two_q == 1 && e.touches.length == 1) {
+      var newX = e.touches[0].clientX;
+      var newY = e.touches[0].clientY;
+      var left = this.data.imgLeft_q + (newX - oldX_q);
+      var top = this.data.imgTop_q + (newY - oldY_q);
+      oldX_q = newX;
+      oldY_q = newY;
+      this.setData({
+        imgLeft_q: left,
+        imgTop_q: top
+      })
+    }
+  },
+  starttap_q: function (event) {
+    var e = event;
+    if (e.touches.length == 2) {
+      one_two_q = 2;
+      var xMove = e.touches[1].clientX - e.touches[0].clientX;
+      var yMove = e.touches[1].clientY - e.touches[0].clientY;
+      olddistance_q = Math.sqrt(xMove * xMove + yMove * yMove);//两手指之间的距离
+    }
+    else if (e.touches.length == 1) {
+      one_two_q = 1;
+      oldX_q = e.touches[0].clientX;
+      oldY_q = e.touches[0].clientY;
+    }
+  },
   onLoad:function(options){
     this.setData({
       item_index: app.globalData.items[parseInt(options.index)],
     });
     if (this.data.item_index.type == 'question_answer') {
       this.setData({
-        question_pic: "https://75502554.qcloud.la/teacher/picture.php?id=" + this.data.item_index.id
+        answer_pic: "https://75502554.qcloud.la/teacher/picture.php?id=" + this.data.item_index.id+"&type=A"
+      });
+    } 
+    if (!this.data.item_index.question) {
+      this.setData({
+        question_pic: "https://75502554.qcloud.la/teacher/picture.php?id=" + this.data.item_index.id + "&type=Q"
       });
     }
     var res = wx.getSystemInfoSync();  //获取系统信息的同步方法，我用了异步里面提示我this.setData错了
     var windowWidth = res.windowWidth;
     imgWidth = windowWidth;
+    imgWidth_q = windowWidth;
     oldscale = 1;
+    oldscale_q = 1;
     this.setData({
       scaleHeight: windowWidth,
       scaleWidth: windowWidth,
-      viewHeight: windowWidth
+      viewHeight: windowWidth,
+      scaleHeight_q: windowWidth,
+      scaleWidth_q: windowWidth,
+      viewHeight_q: windowWidth
     });
   },
   onReady:function(){

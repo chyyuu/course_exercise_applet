@@ -16,6 +16,7 @@ $(document).ready(function(){
 	       		dataType:'json',
 	       		data:{"id":$('#test_zuoye').val()},
 	       		success:function(data){
+//alert(data);
 			    	$.each(data, function(n,value){
 	           			$("#item_zuoye").append('<option value="'+ value +'">'+ value +'</option>');
 	     			});
@@ -130,7 +131,7 @@ $(document).ready(function(){
         			$("#xuanXiang").append($('<span> 答案：</span><div id="xuanXiang_1"><input type="text" id="num_xx" value="请输入项数..." /><button id="tianJia_xx">添加答案</button></div><div id="xuanXiang_xz" class="xuanXiang_div"></div><span> 解释：</span><textarea id="explain"></textarea><br />')); 
 				break;
 			case 'question_answer':
-        			$("#xuanXiang").append($('<span> 答案：</span><form id= "uploadForm"><input type="file" name="photo"/></form>')); 
+        			$("#xuanXiang").append($('<span> 答案：</span><form id= "uploadForm"><input type="file" id="picture" name="photo"/></form>')); 
 				break;
 		}
 		$("#num_xx").focus(function(){
@@ -215,12 +216,16 @@ $(document).ready(function(){
 				"knowledge": JSON.stringify(knowledge)
 			},
 	       		success:function(data){
+//alert(data);
 				if(data=='0'){
 	           			$("#items_"+type).append("<p style='font-family:verdana;color:red'>不好意思，题库中还没有符合条件的该类型的试题。。。</p>");
 					return;
 				}
 			    	$.each(data, function(n,value){
-	           			$("#items_"+type).append("<input type='checkbox' value='"+n+"' name='header'/>"+ value +"<br />");
+					if(value)
+		           			$("#items_"+type).append("<input type='checkbox' value='"+n+"' name='header'/>("+n+")"+ value +"<br />");
+					else
+		           			$("#items_"+type).append("<input type='checkbox' value='"+n+"' name='header'/>("+n+")<img src='https://75502554.qcloud.la/teacher/picture.php?id=" + n + "&type=Q' /><br />");
 	     			});
        			},
             		error:function(xml){
@@ -232,6 +237,7 @@ $(document).ready(function(){
 	$("#tijiao_knowledge").click(function(){
 		$("#tijiao_knowledge").attr('disabled',true);
 		$("#chuJuanzi_div").show();
+		$("#right div").css('height',$(window).height()-3.5*$("#course_knowledge").height());
 		$("#course_juanzi").attr('disabled',true);
 		$("div#knowledge_juanzi input").attr('disabled',true);
 	});
@@ -315,6 +321,30 @@ $(document).ready(function(){
         	});
 	});
 
+function shangChuan(picForm,id){
+	var formData = new FormData($("#"+ picForm)[0]); 
+	formData.append("id", id);
+	formData.append(picForm, 1);
+	var ret;
+	$.ajax({  
+		url: 'index_picture.php' ,  
+		type: 'POST',  
+		data: formData,  
+		async: false,  
+	      	cache: false,  
+		contentType: false,  
+   		processData: false,  
+		success: function (data) {  
+//alert(data);
+			ret=data;	
+		},  
+		error:function(xml){
+			alert("pic----shibei!。。。。" + xml.responseText);
+        	}
+	});  
+	return ret;
+}
+
 	$("#tijiao_shiti").click(function(){
 		var type=$("#type").val();
 		var options=[]; 
@@ -338,15 +368,44 @@ $(document).ready(function(){
 		else
 			knowledge =  $("#knowledge").val();
 		question=$("#question").val();
+
+		if($("#source").val()==''){
+			alert("请输入题目来源...");
+			return;
+		}
+		if($("#knowledge").val()=='qita' && $("#knowledge_qita").val()=="请输入知识点类型..."){
+			alert("请输入知识点...");
+			return;
+		}
+		if($("#question").val()=='' && $("#pic").val()==''){
+			alert("请输入题干正文...");
+			return;
+		}
+		if((type == 'single_answer' || type == 'multi_answer') && (options.length ==0 || options[0]=='')){
+			alert("请输入选项...");
+			return;
+		}
+		if(type != 'question_answer' && (answer.length ==0 || answer[0]=='')){
+			alert("请输入答案...");
+			return;
+		}		
+		if(type != 'question_answer' && $("#explain").val()==''){
+			alert("请输入解释...");
+			return;
+		}
+		if(type == 'question_answer' && $("#picture").val()==''){
+			alert("请选择答案图片...");
+			return;
+		}
 		$.ajax({
     			url:'create_item.php',
     			type:'POST',
+	       		dataType:'json',
     			data:{
    		 		"course":$("#course").val(),
    		 		"knowledge":knowledge,
     				"degree_of_difficulty":$("#degree_of_difficulty").val(),
     				"explain":$("#explain").val(),
- //   				"question":question.replace(/\n|\r\n/g,"<br>"),
     				"question":$("#question").val(),
     				"source":$("#source").val(),
     				"answer": answer,
@@ -354,30 +413,41 @@ $(document).ready(function(){
     				"options": options
     			},
     			success:function(data){ 	
-				alert('出题成功！题号为：'+data);
-				if(type == 'question_answer'){
-     					var formData = new FormData($("#uploadForm")[0]); 
-					formData.append("id", data);
-	     				$.ajax({  
-          					url: 'index_picture.php' ,  
-          					type: 'POST',  
-          					data: formData,  
-          					async: false,  
-          					cache: false,  
-          					contentType: false,  
-          					processData: false,  
-          					success: function (data) {  
-							if(data=='1')
-								alert('图片上传成功！');
+			    	$.each(data, function(n,value){
+					if(value!=1){
+						alert("出题失败！（请尝试将题干正文以图片的形式提交！）");
+						return;
+					}
+					else{
+						if($("#question").val()==''){
+							var ret=shangChuan("picForm",n);
+							if(ret=='1'){
+								if(type != 'question_answer')
+									alert('出题成功！题号为：'+ n);
+								else{
+									var ret=shangChuan("uploadForm",n);
+									if(ret=='1')
+										alert('出题成功！题号为：'+ n);
+									else
+										alert('出题失败！（答案图片格式或者大小有问题！）');
+								}
+							}
 							else
-								alert('图片上传失败！');
-							location.reload();
-          					},  
-        					error:function(xml){
-            						alert("pic----shibei!。。。。" + xml.responseText);
-        					}
-     					});  
-				}
+								alert('出题失败！（题干图片格式或者大小有问题！）');
+						}
+						else{
+							if(type != 'question_answer')
+								alert('出题成功！题号为：'+ n);
+							else{
+								ret=shangChuan("uploadForm",n);
+								if(ret=='1')
+									alert('出题成功！题号为：'+ n);
+								else
+									alert('出题失败！（答案图片格式或者大小有问题！）');
+							}
+						}
+					}
+				});
 				location.reload();
 			},
         		error:function(xml){

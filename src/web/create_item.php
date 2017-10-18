@@ -15,7 +15,8 @@
    	$db->query("set names 'utf8'");  
    	
 	$query="INSERT INTO item SET `explain` = '".$explain."',source = '".$source."',type = '".$type."',course = '".$course."',knowledge = '".$knowledge."',degree_of_difficulty = ".$degree_of_difficulty.",question = '".$question."';";
-	$result = $db->query($query);  
+	$result = $db->query($query);
+	$len= mysqli_affected_rows($db); 
     
     	$query="select max(id) as id from item";
 	$result = $db->query($query);  
@@ -34,7 +35,10 @@
 			$result = $db->query($query);  
 		}
 	}
+	$json = array();
+	$json[$row['id']] = $len;
 
-	echo $row['id'];
+	$json_obj = json_encode($json);
+	echo $json_obj;
     	$db->close();   
 ?>
