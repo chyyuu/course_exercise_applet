@@ -21,8 +21,7 @@ input[type="text"]{
 #right{
 	width:90%;
 	float:left;
-	height:92%;
-	overflow:auto;
+	overflow: scroll;
 }
 
 span{

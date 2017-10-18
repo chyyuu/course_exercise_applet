@@ -81,6 +81,7 @@
 			<option value="5">5</option>
 		</select><br />
 	<span> 题干正文：</span><textarea id="question"></textarea><br />
+	<span>&nbsp</span><form id= "picForm"><input type="file" id="pic" name="pic"/></form>
 	<div id="xuanXiang">
 		<span> 选项：</span>A、对&nbsp&nbsp&nbsp&nbspB、错<br />
 		<span> 答案：</span><input type="text" id="answer"><br />
@@ -106,8 +107,7 @@
         测试名称：<input id="name" type="text" />
         <button id='tijiao_juanzi'>提交</button>
     	<button class='quXiao'>取消</button><br />
-	开始时间：<input id="begin" type="date" />结束时间：<input id="end" type="date" />
-
+		开始时间：<input id="begin" type="date" />结束时间：<input id="end" type="date" />
         <hr />
         <div id='left'>
         	<button id='single_answer' class='jiazai_shiti'>单选题</button>

@@ -5,8 +5,12 @@
   <view wx:elif="{{item_index.type == 'multi_answer'}}"><text class="label">多选题</text></view>
   <view wx:elif="{{item_index.type == 'question_answer'}}"><text class="label">问答题</text></view>
   <view wx:elif="{{item_index.type == 'fill_in_the_blank'}}"><text class="label">填空题</text></view>
-  <view><text>({{item_index.id}}){{item_index.question}}</text></view>
-
+  <view wx:if="{{item_index.question}}"><text>({{item_index.id}}){{item_index.question}}</text></view>
+  <view wx:else><text>({{item_index.id}})</text>
+    <view style="position:relative;height:{{viewHeight_q}}px;width:{{viewHeight_q}}px;overflow:hidden">
+      <image catchtouchstart='starttap_q' catchtouchmove="movetap_q" style="position:absolute;width:{{scaleWidth_q}}px;height:{{scaleHeight_q}}px;left:{{imgLeft_q}}px;top:{{imgTop_q}}px" mode="aspectFit" src="{{question_pic}}"></image>
+    </view>
+  </view>
   <view wx:if="{{item_index.type == 'single_answer' || item_index.type == 'true_false'}}">
     <radio-group class="radio-group" bindchange="radioChange">
         <label class="radio" wx:for="{{item_index.options}}">
@@ -47,7 +51,7 @@
     <view wx:if="{{item_index.type == 'question_answer'}}">
       <text class="label">详解：</text>
       <view style="position:relative;height:{{viewHeight}}px;width:{{viewHeight}}px;overflow:hidden">
-        <image catchtouchstart='starttap' catchtouchmove="movetap" style="position:absolute;width:{{scaleWidth}}px;height:{{scaleHeight}}px;left:{{imgLeft}}px;top:{{imgTop}}px" mode="aspectFit" src="{{question_pic}}"></image>
+        <image catchtouchstart='starttap' catchtouchmove="movetap" style="position:absolute;width:{{scaleWidth}}px;height:{{scaleHeight}}px;left:{{imgLeft}}px;top:{{imgTop}}px" mode="aspectFit" src="{{answer_pic}}"></image>
       </view>
     </view>
     <view wx:else>
